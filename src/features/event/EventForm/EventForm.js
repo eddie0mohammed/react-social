@@ -1,24 +1,30 @@
 import React, { Component } from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import {createEvent, updateEvent} from '../eventAction';
 
 class EventForm extends Component {
 
     state = {
-        title: '',
-        date: '',
-        city: '',
-        venue: '',
-        hostedBy: '',
-
-
+      ...this.props.event
     }
 
     handleFormSubmit = (event) => {
         event.preventDefault();
         if (this.state.id){
           this.props.updateEvent(this.state);
+          this.props.history.push(`/events/${this.state.id}`); 
         }else{
-          this.props.createEvent(this.state);
+          const newEvent = {
+            ...this.state,
+            id:Math.random(),
+            hostPhotoURL:'/assets/user.png',
+            // attendees: [],
+            
+          }
+          this.props.createEvent(newEvent);
+          this.props.history.push(`/events/`);
+
         }
     }
 
@@ -64,7 +70,7 @@ class EventForm extends Component {
                       <Button positive type="submit">
                         Submit
                       </Button>
-                      <Button type="button" onClick={this.props.cancelFormOpen}>Cancel</Button>
+                      <Button type="button" onClick={this.props.history.goBack}>Cancel</Button>
                     </Form>
                   </Segment>
                 
@@ -72,5 +78,27 @@ class EventForm extends Component {
         )
     }
 }
+const mapStateToProps = (state, ownProps) => {
+  const eventId = ownProps.match.params.id;
+  let event = {
+    title: '',
+    date: '',
+    city: '',
+    venue: '',
+    hostedBy: '',
+    attendees: ''
+  }
+  if (eventId && state.events.length > 0){
+    event = state.events.filter(event => event.id === eventId)[0];
+  }
+  return {
+    event: event
+  }
+}
 
-export default EventForm;
+const actions = {
+  createEvent,
+  updateEvent
+}
+
+export default connect(mapStateToProps, actions)(EventForm);

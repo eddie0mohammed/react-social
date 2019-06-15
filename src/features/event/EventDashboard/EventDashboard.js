@@ -1,114 +1,59 @@
 import React, { Component } from 'react'
-import { Grid, Button } from 'semantic-ui-react';
+import { Grid} from 'semantic-ui-react';
 import EventList from '../EventList/EventList';
-import EventForm from '../EventForm/EventForm';
+// import EventForm from '../EventForm/EventForm';
 
-
-const eventsFromDashboard = [
-  {
-    id: '1',
-    title: 'Trip to Tower of London',
-    date: '2018-03-27',
-    category: 'culture',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sollicitudin ligula eu leo tincidunt, quis scelerisque magna dapibus. Sed eget ipsum vel arcu vehicula ullamcorper.',
-    city: 'London, UK',
-    venue: "Tower of London, St Katharine's & Wapping, London",
-    hostedBy: 'Bob',
-    hostPhotoURL: 'https://randomuser.me/api/portraits/men/20.jpg',
-    attendees: [
-      {
-        id: 'a',
-        name: 'Bob',
-        photoURL: 'https://randomuser.me/api/portraits/men/20.jpg'
-      },
-      {
-        id: 'b',
-        name: 'Tom',
-        photoURL: 'https://randomuser.me/api/portraits/men/22.jpg'
-      }
-    ]
-  },
-  {
-    id: '2',
-    title: 'Trip to Punch and Judy Pub',
-    date: '2018-03-28',
-    category: 'drinks',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sollicitudin ligula eu leo tincidunt, quis scelerisque magna dapibus. Sed eget ipsum vel arcu vehicula ullamcorper.',
-    city: 'London, UK',
-    venue: 'Punch & Judy, Henrietta Street, London, UK',
-    hostedBy: 'Tom',
-    hostPhotoURL: 'https://randomuser.me/api/portraits/men/22.jpg',
-    attendees: [
-      {
-        id: 'b',
-        name: 'Tom',
-        photoURL: 'https://randomuser.me/api/portraits/men/22.jpg'
-      },
-      {
-        id: 'a',
-        name: 'Bob',
-        photoURL: 'https://randomuser.me/api/portraits/men/20.jpg'
-      }
-    ]
-  }
-]
+import {connect} from 'react-redux';
+import {createEvent, deleteEvent, updateEvent} from '../eventAction';
 
 
 
 class EventDashboard extends Component {
 
-    state = {
-        events: eventsFromDashboard,
-        isOpen: false,
-        selectedEvent: null,
+    // state = {
+    //     // events: [],
+    //     isOpen: false,
+    //     selectedEvent: null,
 
-    }
+    // }
 
-    handleFormCancel = () => {
-        this.setState({isOpen: false});
+    // handleFormCancel = () => {
+    //     this.setState({isOpen: false});
 
-    }
-    handleCreateFormOpen = () => {
-        this.setState({ isOpen: true, selectedEvent: null});
-    }
+    // }
+    // handleCreateFormOpen = () => {
+    //     this.setState({ isOpen: true, selectedEvent: null});
+    // }
 
-    handleCreateEvent = (newEvent) => {
-        newEvent.id = Math.random();
-        newEvent.hostPhotoURL = '/assets/user.png';
-        this.setState({
-            events: [...this.state.events, newEvent],
-            isOpen: false
-        })
-    }
+    // handleCreateEvent = (newEvent) => {
+    //     newEvent.id = Math.random();
+    //     newEvent.hostPhotoURL = '/assets/user.png';
+    //     this.props.createEvent(newEvent);
+    //     // this.setState({
+    //     //     isOpen: false
+    //     // })
+    // }
 
-    handleSelectedEvent = (event) => {
-        this.setState({
-            selectedEvent: event,
-            isOpen: true,
-        })
-    }
+    // handleSelectedEvent = (event) => {
+    //     this.setState({
+    //         selectedEvent: event,
+    //         isOpen: true,
+    //     })
+    // }
 
-    handleUpdateEvent = (updatedEvent) => {
-        const updatedEvents = this.state.events.map(event => {
-            if (event.id === updatedEvent.id){
-                return {...updatedEvent}
-            }else{
-                return event
-            }
-        });
-        this.setState({
-            events: updatedEvents,
-            isOpen: false,
-            selectedEvent: null,
-        })
+    // handleUpdateEvent = (updatedEvent) => {
+     
+    //     this.props.updateEvent(updatedEvent);
+    //     // this.setState({
+    //     //     isOpen: false,
+    //     //     selectedEvent: null,
+    //     // })
 
-    }
+    // }
 
     handleDeleteEvent = (id) => {
-        const updatedEvents = this.state.events.filter(event => event.id !== id);
-        this.setState({events: updatedEvents});
+      
+        this.props.deleteEvent(id);
     }
 
     render() {
@@ -116,14 +61,15 @@ class EventDashboard extends Component {
             <div>
                 <Grid>
                     <Grid.Column width={10}>
-                        <EventList events={this.state.events} selectEvent={this.handleSelectedEvent} deleteEvent={this.handleDeleteEvent}/>
+                        <EventList events={this.props.events}  deleteEvent={this.handleDeleteEvent}/>
                     </Grid.Column>
                     <Grid.Column width={6}>
-                        <Button positive content="Create Event" onClick={this.handleCreateFormOpen}/>
+                        {/* <Button positive content="Create Event" onClick={this.handleCreateFormOpen}/>
                         {this.state.isOpen && 
-                        <EventForm key={this.state.selectedEvent ? this.state.selectedEvent.id : 0} cancelFormOpen={this.handleFormCancel} 
+                        <EventForm key={this.state.selectedEvent ? this.state.selectedEvent.id : 0} 
                         createEvent={this.handleCreateEvent} selectedEvent={this.handleSelectedEvent} selectEvent={this.state.selectedEvent}
-                            updateEvent={this.handleUpdateEvent} />}
+                            updateEvent={this.handleUpdateEvent} />} */}
+                            <h1>Activity Feed</h1>
                     </Grid.Column>
                 </Grid>
             </div>
@@ -131,4 +77,16 @@ class EventDashboard extends Component {
     }
 }
 
-export default EventDashboard;
+const mapStateToProps = (state) => {
+  return {
+    events: state.events,
+  }
+}
+
+const actions = {
+    createEvent,
+    updateEvent,
+    deleteEvent,
+  }
+
+export default connect(mapStateToProps, actions)(EventDashboard);
