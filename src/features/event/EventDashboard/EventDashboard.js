@@ -5,6 +5,8 @@ import EventList from '../EventList/EventList';
 
 import {connect} from 'react-redux';
 import {createEvent, deleteEvent, updateEvent} from '../eventAction';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import EventActivity from '../EventActivity/EventActivity';
 
 
 
@@ -17,14 +19,16 @@ class EventDashboard extends Component {
     }
 
     render() {
+        const {events, loading} = this.props;
+        if (loading) return <LoadingComponent />
         return (
             <div>
                 <Grid>
                     <Grid.Column width={10}>
-                        <EventList events={this.props.events}  deleteEvent={this.handleDeleteEvent}/>
+                        <EventList events={events}  deleteEvent={this.handleDeleteEvent}/>
                     </Grid.Column>
                     <Grid.Column width={6}>
-                        <h1>Activity Feed</h1>
+                        <EventActivity />
                     </Grid.Column>
                 </Grid>
             </div>
@@ -35,6 +39,7 @@ class EventDashboard extends Component {
 const mapStateToProps = (state) => {
   return {
     events: state.events,
+    loading: state.async.loading,
   }
 }
 
