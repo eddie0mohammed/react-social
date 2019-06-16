@@ -7,17 +7,18 @@ import EventDetailedSidebar from './EventDetailedSidebar';
 import { connect } from 'react-redux';
 
 
-const EventDetailedPage = (props) => {
+const EventDetailedPage = ({event}) => {
+    // console.log(props.event.attendees);
     return (
         <div>
             <Grid>
                 <Grid.Column width={10}>
-                    <EventDetailedHeader event={props.event}/>
-                    <EventDetailedInfo event={props.event} />
+                    <EventDetailedHeader event={event}/>
+                    <EventDetailedInfo event={event} />
                     <EventDetailedChat />
                 </Grid.Column>
                 <Grid.Column width={6}>
-                    <EventDetailedSidebar attendees={props.event.attendees}/>
+                    <EventDetailedSidebar attendees={event.attendees}/>
                 </Grid.Column>
             </Grid>
         </div>
