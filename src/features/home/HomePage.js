@@ -13,7 +13,7 @@ const HomePage = (props) => {
                   alt='logo'
                   style={{ marginBottom: 12 }}
                 />
-                Re-vents
+                Meet-Up
               </Header>
               <Link to='/events'><Button size='huge' inverted >
                 Get started

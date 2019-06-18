@@ -6,7 +6,7 @@ class EventList extends Component {
         return (
             <React.Fragment>
                 {this.props.events && this.props.events.map(event => (
-                    <EventListItem key={event.id} event={event}  deleteEvent={this.props.deleteEvent}/>
+                    <EventListItem key={event.id} event={event} />
                 ))}
             </React.Fragment>
         )

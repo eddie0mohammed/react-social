@@ -1,7 +1,7 @@
 import React from 'react'
 import { Segment, Item, Header, Button, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import {format, parseISO } from 'date-fns';
+import {format } from 'date-fns';
 
 
 const eventImageStyle = {
@@ -18,11 +18,12 @@ const eventImageTextStyle = {
 };
 
 const EventDetailedHeader = (props) => {
+    const {isHost, isGoing, goingToEvent, event, cancelGoingToEvent} = props;
     return (
         <div>
                <Segment.Group>
                   <Segment basic attached="top" style={{ padding: '0' }}>
-                    <Image src={`/assets/categoryImages/${props.event.category}.jpg`} fluid style={eventImageStyle}/>
+                    <Image src={`/assets/categoryImages/${event.category}.jpg`} fluid style={eventImageStyle}/>
             
                     <Segment basic style={eventImageTextStyle}>
                       <Item.Group>
@@ -30,12 +31,12 @@ const EventDetailedHeader = (props) => {
                           <Item.Content>
                             <Header
                               size="huge"
-                              content={props.event.title}
+                              content={event.title}
                               style={{ color: 'white' }}
                             />
-                            <p>{props.event.date && format(parseISO(props.event.date), 'EEEE do LLLL')}</p>
+                            <p>{event.date && format(event.date.toDate(), 'EEEE do LLLL')}</p>
                             <p>
-                              Hosted by <strong>{props.event.hostedBy}</strong>
+                              Hosted by <strong><Link style={{color: 'white'}} to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link></strong>
                             </p>
                           </Item.Content>
                         </Item>
@@ -43,13 +44,19 @@ const EventDetailedHeader = (props) => {
                     </Segment>
                   </Segment>
             
-                  <Segment attached="bottom">
-                    <Button>Cancel My Place</Button>
-                    <Button color="teal">JOIN THIS EVENT</Button>
-            
+                  <Segment attached="bottom" clearing>
+                  {!isHost && (
+                    <React.Fragment>
+                      {isGoing ?
+                         <Button onClick={() => cancelGoingToEvent(event)}>Cancel My Place</Button> 
+                         : 
+                         <Button onClick={() => goingToEvent(event)} color="teal">JOIN THIS EVENT</Button>}
+                  </React.Fragment>)}
+                    {isHost && 
                     <Button as={Link} to={`/manage/${props.event.id}`} color="orange" floated="right">
                       Manage Event
                     </Button>
+                    }
                   </Segment>
                 </Segment.Group>
         </div>

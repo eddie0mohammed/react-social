@@ -34,7 +34,7 @@ class Navbar extends Component {
                 <Container>
                     <Menu.Item as={NavLink} exact to="/" header>
                         <img src="assets/logo.png" alt="logo" />
-                        Re-vents
+                        Meet-Up
                     </Menu.Item>
                     <Menu.Item as={NavLink} to="/events" name="Events" />
                     {authenticated && 
@@ -47,7 +47,7 @@ class Navbar extends Component {
                         </React.Fragment>
                     }
                     {authenticated ? 
-                    <SignedInMenu signOut={this.handleSignOut} profile={profile}/> : 
+                    <SignedInMenu signOut={this.handleSignOut} profile={profile} auth={auth}/> : 
                     <SignedOutMenu signIn={this.handleSignIn} register={this.handleRegister}/>}
                 </Container>
             </Menu> 
